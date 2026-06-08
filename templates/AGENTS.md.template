@@ -1,0 +1,37 @@
+# AGENTS.md — {{PROJECT_NAME}}
+
+This file is the **cross-tool standard** for all AI agents on this project (Claude, Gemini, Copilot, Codex, Hermes, and others). Every agent reads this file and the `.context/` library before starting work.
+
+---
+
+## Step 1 — Load project context
+
+Read these files before touching any code:
+
+| File | Contents |
+|------|----------|
+| `.context/01-project-overview.md` | Project goals, team, business model |
+| `.context/02-tech-stack.md` | Languages, frameworks, versions |
+| `.context/03-architecture.md` | Module layout, key patterns, patterns |
+| `.context/04-conventions.md` | Coding standards, git workflow, gotchas |
+| `.context/05-database.md` | Data layer — schema, migrations, queries *(if present)* |
+| `.context/06-agent-behavior.md` | **Your role, quality bar, and definition of done** |
+| `.context/07-testing.md` | Test structure, how to run |
+| `.context/08-deployment.md` | Build, release, CI/CD *(if present)* |
+
+---
+
+## Step 2 — Internalize the behavior contract
+
+`.context/06-agent-behavior.md` defines your role and quality bar. All agents apply this standard — there is no "fast mode" that bypasses it.
+
+---
+
+## Step 3 — Project quick reference
+
+<!-- PROJECT-SPECIFIC: fill in build/run commands for this repo -->
+| Task | Command |
+|------|---------|
+| *(add project commands here)* | |
+
+**Branch:** `feat/feature-name` or `fix/description` → PR → `main`

@@ -1,0 +1,20 @@
+projects:
+  - repo: Recog-Omni/wheresmyjunk
+    name: "Where's My Junk"
+    description: "KMP home inventory tracker (Android + iOS)"
+    copilot_instructions: true   # has .github/copilot-instructions.md
+
+  - repo: Recog-Omni/website
+    name: "Recog-Omni Website"
+    description: "Static marketing site (HTML/CSS/JS)"
+    copilot_instructions: false
+
+  - repo: Recog-Omni/sports-picker
+    name: "Sports Picker"
+    description: "Sports prediction app"
+    copilot_instructions: false
+
+  - repo: Recog-Omni/road_rager_2.0
+    name: "Road Rager 2.0"
+    description: "Endless driving game (Godot 4)"
+    copilot_instructions: false

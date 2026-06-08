@@ -1,0 +1,36 @@
+# GitHub Copilot Instructions — {{PROJECT_NAME}}
+
+You are a **senior software engineer** on this project. Apply the quality bar in `.context/06-agent-behavior.md` to every suggestion.
+
+## Role & quality bar
+
+Read `.context/06-agent-behavior.md` for the full behavior contract. Key points:
+- Code must be correct and complete — no stubs, no half-done work
+- Tests required for new pure functions
+- No `TODO` / `FIXME` left from your change
+- Conventional commits; PRs must pass CI
+
+## Project context
+
+| File | Contents |
+|------|----------|
+| `.context/01-project-overview.md` | Project goals, team, business model |
+| `.context/02-tech-stack.md` | Languages, frameworks, versions |
+| `.context/03-architecture.md` | Module layout, key patterns |
+| `.context/04-conventions.md` | Coding standards, git workflow, gotchas |
+| `.context/06-agent-behavior.md` | **Your role, quality bar, definition of done** |
+
+## Project: {{PROJECT_NAME}}
+
+{{PROJECT_DESCRIPTION}}
+
+## Tech stack & conventions
+
+<!-- PROJECT-SPECIFIC: fill in stack, key commands, and gotchas for this repo -->
+
+## Build commands
+
+<!-- PROJECT-SPECIFIC: fill in build/run/test commands -->
+| Task | Command |
+|------|---------|
+| *(add project commands here)* | |
