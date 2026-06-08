@@ -11,8 +11,11 @@ projects:
 
   - repo: Recog-Omni/sports-picker
     name: "Sports Picker"
-    description: "Sports prediction app"
-    copilot_instructions: false
+    description: "Group sports prediction app — KMP (iOS/Android/Web)"
+    copilot_instructions: true
+    sync:
+      - path: "shared/06-agent-behavior.md"
+        dest: ".context/06-agent-behavior.md"
 
   - repo: Recog-Omni/road_rager_2.0
     name: "Road Rager 2.0"
