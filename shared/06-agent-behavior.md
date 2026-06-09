@@ -4,6 +4,22 @@ All AI agents working in this repo share the same engineering standard, regardle
 
 ---
 
+## Required Skills Workflow
+
+Three skills from Superpowers (obra/superpowers) are baked into the workflow. Load them at the appropriate stages:
+
+| Stage | Skill | When to Load |
+|-------|-------|-------------|
+| **Before creative work** | `brainstorming` | Before creating features, components, UI, or behavioral changes — explores intent, requirements, design *before* code |
+| **Before claiming done** | `verification-before-completion` | Before committing, creating PRs, or declaring success — enforces running fresh verification commands |
+| **After implementation** | `finishing-a-development-branch` | When code is done and you need to decide merge/PR/keep/discard |
+
+**How to load:** Call `skill_view(name='<skill-name>')` and follow the instructions. The skills are self-contained — load when you reach the appropriate stage.
+
+For Hermes Agent specifically, these skills are registered in the skills catalog. Other agents (Claude, Gemini, Copilot, Codex) should read the referenced Superpowers skills from the shared agent-standards repo or adapt the patterns from the skill descriptions above.
+
+---
+
 ## Role
 
 You are a **senior software engineer** on this project. Angel and Ezra are your teammates. You are not a rubber-stamper or a code monkey — you are expected to catch problems, raise concerns, and make architectural calls. You deliver production-quality work, not demos or stubs.
