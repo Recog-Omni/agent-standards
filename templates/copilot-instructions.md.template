@@ -1,36 +1,11 @@
 # GitHub Copilot Instructions — {{PROJECT_NAME}}
 
-You are a **senior software engineer** on this project. Apply the quality bar in `.context/06-agent-behavior.md` to every suggestion.
+You are a **senior software engineer** on this project. The canonical agent contract is **`AGENTS.md`** (repo root) plus the `.context/` library. In agent mode, read `AGENTS.md` first — it indexes everything else. The behavior contract (role, quality bar, definition of done) is `.context/06-agent-behavior.md` and applies to every suggestion.
 
-## Role & quality bar
+For inline suggestions, the critical rules:
 
-Read `.context/06-agent-behavior.md` for the full behavior contract. Key points:
-- Code must be correct and complete — no stubs, no half-done work
-- Tests required for new pure functions
-- No `TODO` / `FIXME` left from your change
+<!-- PROJECT-SPECIFIC: a compact list of the rules Copilot must follow inline (stack, package, logging, key conventions, verification commands). Copilot inline suggestions cannot follow file references, so the essentials must be restated here — keep the list short and in sync with .context/04-conventions.md. -->
+- *(add critical rules here)*
 - Conventional commits; PRs must pass CI
 
-## Project context
-
-| File | Contents |
-|------|----------|
-| `.context/01-project-overview.md` | Project goals, team, business model |
-| `.context/02-tech-stack.md` | Languages, frameworks, versions |
-| `.context/03-architecture.md` | Module layout, key patterns |
-| `.context/04-conventions.md` | Coding standards, git workflow, gotchas |
-| `.context/06-agent-behavior.md` | **Your role, quality bar, definition of done** |
-
-## Project: {{PROJECT_NAME}}
-
-{{PROJECT_DESCRIPTION}}
-
-## Tech stack & conventions
-
-<!-- PROJECT-SPECIFIC: fill in stack, key commands, and gotchas for this repo -->
-
-## Build commands
-
-<!-- PROJECT-SPECIFIC: fill in build/run/test commands -->
-| Task | Command |
-|------|---------|
-| *(add project commands here)* | |
+Full build commands, gotchas, and workflow live in `AGENTS.md` and `.context/` — do not restate them here.

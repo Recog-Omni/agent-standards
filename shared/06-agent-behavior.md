@@ -1,22 +1,8 @@
-# Agent Behavior Contract — Where's My Junk
+# Agent Behavior Contract — Recog-Omni
 
-All AI agents working in this repo share the same engineering standard, regardless of tool (Claude, Gemini, Copilot, Codex, Hermes, or other). This file is the single source of truth for expected behavior.
+All AI agents working in any Recog-Omni repo share the same engineering standard, regardless of tool (Claude, Gemini, Copilot, Codex, Hermes, or other). This file is the single source of truth for expected behavior.
 
----
-
-## Required Skills Workflow
-
-Three skills from Superpowers (obra/superpowers) are baked into the workflow. Load them at the appropriate stages:
-
-| Stage | Skill | When to Load |
-|-------|-------|-------------|
-| **Before creative work** | `brainstorming` | Before creating features, components, UI, or behavioral changes — explores intent, requirements, design *before* code |
-| **Before claiming done** | `verification-before-completion` | Before committing, creating PRs, or declaring success — enforces running fresh verification commands |
-| **After implementation** | `finishing-a-development-branch` | When code is done and you need to decide merge/PR/keep/discard |
-
-**How to load:** Call `skill_view(name='<skill-name>')` and follow the instructions. The skills are self-contained — load when you reach the appropriate stage.
-
-For Hermes Agent specifically, these skills are registered in the skills catalog. Other agents (Claude, Gemini, Copilot, Codex) should read the referenced Superpowers skills from the shared agent-standards repo or adapt the patterns from the skill descriptions above.
+> Synced from [Recog-Omni/agent-standards](https://github.com/Recog-Omni/agent-standards) — edit it there, not here. Everything project-specific (commands, stack rules, gotchas) lives in the project's `AGENTS.md` and the other `.context/` files.
 
 ---
 
@@ -31,25 +17,22 @@ You are a **senior software engineer** on this project. Angel and Ezra are your 
 Every change you make must clear the following bar before you report it as done:
 
 ### Correctness
-- Code compiles on both targets. Run or confirm:
-  - `./gradlew :composeApp:compileDebugKotlinAndroid`
-  - `./gradlew :composeApp:compileKotlinIosSimulatorArm64`
-- No new compiler warnings introduced (treat warnings as signal, not noise)
-- Logic is correct at the boundary — null safety, empty lists, zero quantities, missing photos
+- The project's **verification commands** (listed in `AGENTS.md`) all pass — build/compile for every target the project ships
+- No new compiler/linter warnings introduced (treat warnings as signal, not noise)
+- Logic is correct at the boundary — nulls, empty collections, zero values, missing optional data
 
-### Shared-first architecture
-- Business logic belongs in `commonMain`. Platform code goes in `androidMain` / `iosMain` only when required by a platform API
-- New platform capabilities use the `expect`/`actual` pattern
-- Never use `Dispatchers.IO` in `commonMain` — use `Dispatchers.Default`
+### Architecture
+- Follow the project's architecture and conventions (`.context/03-architecture.md`, `.context/04-conventions.md`) — do not import patterns from other stacks
+- Put logic in the most shared/central layer the project's structure allows; platform- or layer-specific code only where genuinely required
 
 ### Tests
 - All PRs include tests for new pure functions
 - Do not break existing tests
-- Test pure logic in `commonTest` using `FakePreferencesStore` or equivalent fakes — avoid platform dependencies in tests
+- Test pure logic with fakes/in-memory implementations — avoid platform or network dependencies in tests (see `.context/07-testing.md` for the project's patterns)
 
 ### No regressions
-- Changing shared code (navigation, repository, `App.kt`) requires checking affected screens
-- SQLDelight schema changes require a numbered `.sqm` migration file
+- Changing shared/core code (navigation, data layer, app entry points) requires checking the call sites and screens it affects
+- Schema or persisted-data changes follow the project's migration convention — never edit a schema in place without a migration
 
 ### No half-done work
 - Do not leave `TODO`, `FIXME`, or commented-out blocks unless the task explicitly calls for a placeholder
@@ -65,7 +48,7 @@ When requirements are ambiguous, apply these defaults:
 |---|---|
 | Add or edit? | Edit existing; avoid new files unless required |
 | Abstraction vs. repetition | Three similar lines is fine; premature abstraction is not |
-| Error handling scope | Validate at system boundaries (user input, external APIs) — trust internal guarantees |
+| Error handling scope | Validate at system boundaries (user input, external APIs). Catch blocks must log via the project's logging convention; never swallow exceptions silently. |
 | Comments | Write none by default; only add a comment when the *why* is non-obvious |
 | Feature flags | Do not add them unless explicitly requested |
 | Backwards-compat shims | Delete dead code; do not leave re-exports or `_old` aliases |
@@ -83,18 +66,29 @@ When requirements are ambiguous, apply these defaults:
 
 ## Git & PR Standards
 
-- Branch: `feat/feature-name` or `fix/description` → PR → `main`
+### Issue workflow — every task starts here
+
+Work is tracked by a GitHub issue with a linked branch. Follow these three steps in order:
+
+1. **Create the issue** (`gh issue create`) — describe the problem, proposed fix, and acceptance criteria
+2. **Create the linked branch** via GitHub's `createLinkedBranch` GraphQL mutation — this creates the remote branch and links it to the issue in one step (default name: `<issue#>-<short-title>`)
+3. **Fetch and check out** the branch locally: `git fetch origin && git checkout <branch>`
+
+### Branches, commits, PRs
+
+- Branch: the linked-branch name from the issue (`<issue#>-<short-title>`); for quick work without an issue, `feat/feature-name` or `fix/description` → PR → `main`
 - Commit style: conventional commits (`feat:`, `fix:`, `chore:`, `refactor:`, `test:`)
-- PR must pass CI: `test` → `build-android` + `build-ios` + `lint` (see `.github/workflows/build.yml`)
-- Do not merge with a failing lint or failing build job
+- **Before creating or updating a PR**: run the project's verification commands (`AGENTS.md`) — all must pass
+- Prefer small, focused diffs — a single PR should do one thing
+- PR must pass the project's CI; do not merge with a failing job
 
 ---
 
 ## What "Done" Means
 
 A task is done when:
-1. Both compile checks pass (Android + iOS)
-2. Existing tests still pass (`./gradlew :composeApp:check`)
+1. The project's verification commands all pass
+2. Existing tests still pass
 3. New pure logic has test coverage
 4. No `TODO` / `FIXME` left from this change
 5. PR description explains *why*, not just *what*

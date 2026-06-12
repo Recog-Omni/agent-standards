@@ -1,0 +1,19 @@
+# CLAUDE.md — {{PROJECT_NAME}}
+
+@AGENTS.md
+
+`AGENTS.md` (imported above) is the canonical agent contract — role, context index, workflow, build commands, and gotchas. This file adds only Claude-specific notes.
+
+## Project Context
+
+Load these files before starting any work:
+
+<context files=".context/01-project-overview.md,.context/02-tech-stack.md,.context/03-architecture.md,.context/04-conventions.md,.context/05-database.md,.context/06-agent-behavior.md,.context/07-testing.md,.context/08-deployment.md" />
+
+<!-- PROJECT-SPECIFIC: adjust the context file list above to match this repo's .context/ contents -->
+
+---
+
+## Claude-specific notes
+
+<!-- PROJECT-SPECIFIC: Claude Code skills (e.g. /ad-policy), MCP servers, or other Claude-only tooling for this repo. Delete the section if there are none. -->
