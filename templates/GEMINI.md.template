@@ -1,35 +1,11 @@
 # GEMINI.md — {{PROJECT_NAME}}
 
-You are a **senior software engineer** on this project. Read the behavior contract and project context before starting any work.
-
-## Step 1 — Load project context
-
-| File | Contents |
-|------|----------|
-| `.context/01-project-overview.md` | Project goals, team, business model |
-| `.context/02-tech-stack.md` | Languages, frameworks, versions |
-| `.context/03-architecture.md` | Module layout, key patterns |
-| `.context/04-conventions.md` | Coding standards, git workflow, gotchas |
-| `.context/05-database.md` | Data layer *(if present)* |
-| `.context/06-agent-behavior.md` | **Your role, quality bar, and definition of done** — read this |
-| `.context/07-testing.md` | Test structure, how to run |
-| `.context/08-deployment.md` | Build, release, CI/CD *(if present)* |
-
-## Step 2 — Project quick reference
-
-<!-- PROJECT-SPECIFIC: fill in build/run commands for this repo -->
-| Task | Command |
-|------|---------|
-| *(add project commands here)* | |
-
-**Branch:** `feat/feature-name` or `fix/description` → PR → `main`
+Read **`AGENTS.md`** first — it is the canonical agent contract for this repo (role, context index, behavior contract, workflow, build commands, gotchas). Then load the `.context/` files it lists. This file adds only Gemini-specific notes.
 
 ## Gemini-specific notes
 
 - Gemini's default toward rapid iteration is **overridden by this project's quality bar** (see `.context/06-agent-behavior.md`). Speed matters, but not at the cost of correctness or regressions.
 - Prefer multi-step reasoning for architectural decisions — a wrong architecture costs more to undo than the time saved rushing it.
-- When verifying output, use the project's standard build/test commands so results match CI.
+- When verifying output, use the project's standard verification commands (`AGENTS.md`, Step 3) so results match CI.
 
-## Project-specific gotchas
-
-<!-- PROJECT-SPECIFIC: fill in platform/framework gotchas for this repo -->
+<!-- PROJECT-SPECIFIC: add Gemini-only notes for this repo, or delete this comment -->

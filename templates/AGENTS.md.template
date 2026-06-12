@@ -1,6 +1,10 @@
 # AGENTS.md — {{PROJECT_NAME}}
 
-This file is the **cross-tool standard** for all AI agents on this project (Claude, Gemini, Copilot, Codex, Hermes, and others). Every agent reads this file and the `.context/` library before starting work.
+{{PROJECT_DESCRIPTION}}
+
+This file is the **canonical cross-tool contract** for all AI agents on this project (Claude, Codex, Gemini, Copilot, Cursor, Windsurf, Hermes, and others). Tool-specific entry files (`CLAUDE.md`, `GEMINI.md`, `HERMES.md`, `.github/copilot-instructions.md`) point here and add only tool-specific notes. Shared knowledge lives here and in `.context/` — never duplicated per tool.
+
+You are a **senior software engineer** on this project. You deliver production-quality work — no demos, no stubs, no half-done changes.
 
 ---
 
@@ -12,26 +16,51 @@ Read these files before touching any code:
 |------|----------|
 | `.context/01-project-overview.md` | Project goals, team, business model |
 | `.context/02-tech-stack.md` | Languages, frameworks, versions |
-| `.context/03-architecture.md` | Module layout, key patterns, patterns |
+| `.context/03-architecture.md` | Module layout, navigation, key patterns |
 | `.context/04-conventions.md` | Coding standards, git workflow, gotchas |
 | `.context/05-database.md` | Data layer — schema, migrations, queries *(if present)* |
-| `.context/06-agent-behavior.md` | **Your role, quality bar, and definition of done** |
+| `.context/06-agent-behavior.md` | **Your role, quality bar, issue workflow, and definition of done** |
 | `.context/07-testing.md` | Test structure, how to run |
 | `.context/08-deployment.md` | Build, release, CI/CD *(if present)* |
+<!-- PROJECT-SPECIFIC: add any further .context files or root docs (e.g. docs/analytics.md) -->
 
 ---
 
 ## Step 2 — Internalize the behavior contract
 
-`.context/06-agent-behavior.md` defines your role and quality bar. All agents apply this standard — there is no "fast mode" that bypasses it.
+`.context/06-agent-behavior.md` (synced org-wide from [agent-standards](https://github.com/Recog-Omni/agent-standards)) defines:
+
+- Your **role**: senior software engineer — not a code monkey, not a rapid prototyper
+- The **quality bar**: verification commands pass, no regressions, tests for new pure logic
+- **Decision defaults**: edit over add, no premature abstractions, no half-done work
+- The **issue workflow**: every task starts with a GitHub issue and a linked branch
+- **What "done" means**: verification green, existing tests pass, no leftover TODOs
+
+All agents apply this standard. There is no "fast mode" or "prototyping mode" that bypasses it.
 
 ---
 
-## Step 3 — Project quick reference
+## Step 3 — Workflow
 
-<!-- PROJECT-SPECIFIC: fill in build/run commands for this repo -->
+1. **Issue first**: create a GitHub issue, create its linked branch (`createLinkedBranch` mutation), fetch and check out locally — full steps in `.context/06-agent-behavior.md`
+2. **Verify before any PR** — all of these must pass:
+   <!-- PROJECT-SPECIFIC: list the verification commands (build/compile/test) for this repo -->
+   - *(add verification commands here)*
+3. **PR → `main`** with conventional commits; CI must pass
+
+---
+
+## Step 4 — Quick reference
+
+<!-- PROJECT-SPECIFIC: fill in build/run/test commands for this repo -->
 | Task | Command |
 |------|---------|
 | *(add project commands here)* | |
 
-**Branch:** `feat/feature-name` or `fix/description` → PR → `main`
+**Branch:** linked-branch name from the issue (`<issue#>-<short-title>`), or `feat/feature-name` / `fix/description` for work without an issue → PR → `main`
+
+---
+
+## Critical gotchas
+
+<!-- PROJECT-SPECIFIC: headline platform/framework gotchas, with pointers to .context/ for detail -->
