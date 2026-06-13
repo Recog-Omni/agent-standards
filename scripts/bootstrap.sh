@@ -2,10 +2,13 @@
 # bootstrap.sh — onboard a new repo into the agent-standards system
 #
 # Usage:
-#   ./scripts/bootstrap.sh <org/repo> "<Project Name>" "<Short description>"
+#   ./scripts/bootstrap.sh <org/repo> "<Project Name>" "<Short description>" [stack]
+#
+#   [stack] — optional; must match a file in shared/stacks/ (e.g. "kmp")
 #
 # What it does:
 #   1. Copies shared/06-agent-behavior.md → .context/06-agent-behavior.md in the target repo
+#      (plus shared/stacks/<stack>.md → .context/06-stack-<stack>.md when a stack is given)
 #   2. Generates AGENTS.md (canonical contract), CLAUDE.md, GEMINI.md, HERMES.md, and
 #      .github/copilot-instructions.md from templates (with placeholders filled)
 #   3. Opens a PR in the target repo
@@ -16,11 +19,17 @@
 
 set -euo pipefail
 
-REPO="${1:?Usage: $0 <org/repo> '<Project Name>' '<Description>'}"
+REPO="${1:?Usage: $0 <org/repo> '<Project Name>' '<Description>' [stack]}"
 PROJECT_NAME="${2:?missing project name}"
 PROJECT_DESC="${3:?missing project description}"
+STACK="${4:-}"
 BRANCH="chore/bootstrap-agent-context"
 TMPDIR=$(mktemp -d)
+
+if [ -n "$STACK" ] && [ ! -f "shared/stacks/$STACK.md" ]; then
+  echo "✗ unknown stack '$STACK' — no shared/stacks/$STACK.md" >&2
+  exit 1
+fi
 
 echo "→ Bootstrapping agent context for $REPO"
 
@@ -29,9 +38,12 @@ gh repo clone "$REPO" "$TMPDIR/target" -- --depth=1 --quiet
 cd "$TMPDIR/target"
 git checkout -b "$BRANCH" 2>/dev/null || git checkout "$BRANCH"
 
-# Copy shared behavior contract
+# Copy shared behavior contract (and stack contract if given)
 mkdir -p .context .github
 cp "$OLDPWD/shared/06-agent-behavior.md" .context/06-agent-behavior.md
+if [ -n "$STACK" ]; then
+  cp "$OLDPWD/shared/stacks/$STACK.md" ".context/06-stack-$STACK.md"
+fi
 
 # Generate agent files from templates
 substitute() {
@@ -48,7 +60,7 @@ substitute "$OLDPWD/templates/HERMES.md.template"               > HERMES.md
 substitute "$OLDPWD/templates/copilot-instructions.md.template" > .github/copilot-instructions.md
 
 # Commit and push
-git add .context/06-agent-behavior.md AGENTS.md CLAUDE.md GEMINI.md HERMES.md .github/copilot-instructions.md
+git add .context/ AGENTS.md CLAUDE.md GEMINI.md HERMES.md .github/copilot-instructions.md
 git commit -m "chore: bootstrap agent context from agent-standards
 
 Adds shared behavior contract and agent index files.
