@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# pre-push — local verification gate, installed from Recog-Omni/agent-standards.
+#
+# Runs the repo's verification commands before a push completes. If they fail,
+# the push is aborted so a broken commit never reaches CI (which matters while
+# hosted CI minutes are limited / iOS runs on self-hosted runners).
+#
+# It runs a repo-local `.agent-verify` script (the project's verification
+# commands, mirroring AGENTS.md Step 3). If that file is absent, the hook is a
+# no-op with a hint — so installing it never breaks a repo that hasn't opted in.
+#
+# Bypass in an emergency:  git push --no-verify
+
+set -euo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+VERIFY="$REPO_ROOT/.agent-verify"
+
+# Skip when there is nothing to push (e.g. deleting a remote branch)
+if [ -t 0 ]; then
+  :
+else
+  # Read stdin so git doesn't complain; we don't gate on ref contents here.
+  cat >/dev/null || true
+fi
+
+if [ ! -f "$VERIFY" ]; then
+  echo "pre-push: no .agent-verify script in this repo — skipping local verification."
+  echo "          (add one with the project's verification commands to enable the gate)"
+  exit 0
+fi
+
+echo "pre-push: running local verification (.agent-verify) — use 'git push --no-verify' to bypass"
+echo "────────────────────────────────────────────────────────────────────"
+
+if bash "$VERIFY"; then
+  echo "────────────────────────────────────────────────────────────────────"
+  echo "pre-push: verification passed ✓"
+  exit 0
+else
+  status=$?
+  echo "────────────────────────────────────────────────────────────────────"
+  echo "pre-push: verification FAILED (exit $status) — push aborted." >&2
+  echo "          Fix the failures, or bypass with: git push --no-verify" >&2
+  exit "$status"
+fi
