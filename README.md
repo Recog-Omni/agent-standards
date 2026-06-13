@@ -9,6 +9,7 @@ Every Recog-Omni repo follows the same three-layer pattern:
 | Layer | Lives in | Synced? |
 |-------|----------|---------|
 | **Behavior contract** — role, quality bar, issue workflow, definition of done | `.context/06-agent-behavior.md` in each repo | ✅ from `shared/06-agent-behavior.md` here |
+| **Stack contract** — rules shared by every repo on the same tech stack (e.g. KMP) | `.context/06-stack-<stack>.md` in each repo with a `stack:` field | ✅ from `shared/stacks/<stack>.md` here |
 | **Canonical agent contract** — context index, verification commands, quick reference, gotchas | `AGENTS.md` in each repo | Bootstrapped from template, then project-owned |
 | **Project knowledge** — overview, stack, architecture, conventions, data, testing, deployment | `.context/01–05, 07+` in each repo | Project-owned |
 
@@ -21,7 +22,9 @@ The shared contract is deliberately **stack-agnostic**: it never names a build t
 ```
 agent-standards/
 ├── shared/
-│   └── 06-agent-behavior.md             ← The behavior contract — edit this, nowhere else
+│   ├── 06-agent-behavior.md             ← The behavior contract — edit this, nowhere else
+│   └── stacks/
+│       └── kmp.md                       ← KMP stack contract (Dispatchers, expect/actual, K/N gotchas)
 ├── templates/
 │   ├── AGENTS.md.template               ← Canonical cross-tool contract
 │   ├── CLAUDE.md.template               ← Thin pointer (imports AGENTS.md via @AGENTS.md)
@@ -38,8 +41,8 @@ agent-standards/
 
 ## How the sync works
 
-1. Edit `shared/06-agent-behavior.md` and merge to `main`.
-2. The `sync-to-projects` workflow fires automatically, reads the registry from `projects.yml`, and opens a PR in each listed repo with the updated file at `.context/06-agent-behavior.md`.
+1. Edit `shared/06-agent-behavior.md` (or a stack contract under `shared/stacks/`) and merge to `main`.
+2. The `sync-to-projects` workflow fires automatically, reads the registry from `projects.yml`, and opens a PR in each listed repo with the updated contract at `.context/06-agent-behavior.md` — plus `.context/06-stack-<stack>.md` for repos that declare a `stack:` field.
 3. Review and merge each PR. Everything else in each project (AGENTS.md, quick-ref, gotchas) is **not touched** — it stays project-specific.
 
 To sync without Actions (or for an immediate one-off):
@@ -53,10 +56,10 @@ To sync without Actions (or for an immediate one-off):
 
 ```bash
 # From the root of this repo
-./scripts/bootstrap.sh Recog-Omni/new-repo "Project Name" "One-line description"
+./scripts/bootstrap.sh Recog-Omni/new-repo "Project Name" "One-line description" [stack]
 ```
 
-This copies the behavior contract, generates `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `HERMES.md`, and `.github/copilot-instructions.md` from templates, and opens a PR in the target repo.
+This copies the behavior contract (plus the stack contract when `[stack]` is given, e.g. `kmp`), generates `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `HERMES.md`, and `.github/copilot-instructions.md` from templates, and opens a PR in the target repo.
 
 Then:
 1. Fill in the `<!-- PROJECT-SPECIFIC -->` sections (verification commands, quick reference, gotchas)
@@ -65,7 +68,8 @@ Then:
 
 ## Governance rules
 
-- **Contract changes happen here.** Never edit `.context/06-agent-behavior.md` in a project repo — the next sync will overwrite it. Anything project-specific belongs in the project's `AGENTS.md` or other `.context/` files.
+- **Contract changes happen here.** Never edit `.context/06-agent-behavior.md` or `.context/06-stack-*.md` in a project repo — the next sync will overwrite them. Anything project-specific belongs in the project's `AGENTS.md` or other `.context/` files.
+- **Stack contracts hold rules shared by a tech stack, not by one project.** A rule true for every KMP repo (e.g. no `Dispatchers.IO` in `commonMain`) goes in `shared/stacks/kmp.md`; a rule about one project's modules or libraries stays in that project.
 - **Knowledge changes happen in the project.** Architecture, conventions, gotchas → the project's `.context/`; never duplicated into tool entry files.
 - **Reference implementation:** [Recog-Omni/wheresmyjunk](https://github.com/Recog-Omni/wheresmyjunk) — see its `AGENTS.md`, `.context/`, and `docs/` for the pattern fully applied.
 

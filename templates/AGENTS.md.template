@@ -20,6 +20,7 @@ Read these files before touching any code:
 | `.context/04-conventions.md` | Coding standards, git workflow, gotchas |
 | `.context/05-database.md` | Data layer — schema, migrations, queries *(if present)* |
 | `.context/06-agent-behavior.md` | **Your role, quality bar, issue workflow, and definition of done** |
+| `.context/06-stack-*.md` | Stack-specific contract (e.g. KMP rules) *(if present)* |
 | `.context/07-testing.md` | Test structure, how to run |
 | `.context/08-deployment.md` | Build, release, CI/CD *(if present)* |
 <!-- PROJECT-SPECIFIC: add any further .context files or root docs (e.g. docs/analytics.md) -->

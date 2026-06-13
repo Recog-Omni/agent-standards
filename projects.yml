@@ -2,6 +2,7 @@ projects:
   - repo: Recog-Omni/wheresmyjunk
     name: "Where's My Junk"
     description: "KMP home inventory tracker (Android + iOS)"
+    stack: kmp                   # also syncs shared/stacks/kmp.md → .context/06-stack-kmp.md
     copilot_instructions: true   # has .github/copilot-instructions.md
 
   - repo: Recog-Omni/website
@@ -12,11 +13,13 @@ projects:
   - repo: Recog-Omni/sports-picker
     name: "Sports Picker"
     description: "Group sports prediction app — KMP (iOS/Android/Web)"
+    stack: kmp
     copilot_instructions: true
 
   - repo: Recog-Omni/build-view
     name: "Build View"
     description: "Remodel project management platform — KMP (Android/iOS/Web)"
+    stack: kmp
     copilot_instructions: false
 
   - repo: Recog-Omni/road_rager_2.0
