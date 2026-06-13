@@ -31,9 +31,12 @@ agent-standards/
 │   ├── GEMINI.md.template               ← Thin pointer + Gemini notes
 │   ├── HERMES.md.template               ← Thin pointer + Superpowers skills
 │   └── copilot-instructions.md.template ← Inline rules + pointer
+├── hooks/
+│   └── pre-push                         ← Local verification gate (runs a repo's .agent-verify)
 ├── scripts/
 │   ├── bootstrap.sh                     ← Onboard a new repo
-│   └── sync.sh                          ← Manual sync (when Actions is unavailable)
+│   ├── sync.sh                          ← Manual sync (when Actions is unavailable)
+│   └── install-hooks.sh                 ← Install the shared git hooks into a repo
 ├── projects.yml                         ← Registry of synced repos (single source for the workflow matrix)
 └── .github/workflows/
     └── sync-to-projects.yml             ← Auto-opens PRs when the contract changes
@@ -51,6 +54,30 @@ To sync without Actions (or for an immediate one-off):
 ./scripts/sync.sh                      # all registered repos
 ./scripts/sync.sh Recog-Omni/wheresmyjunk   # one repo
 ```
+
+## Local verification gate (pre-push hook)
+
+While hosted CI minutes are limited and iOS builds run on self-hosted runners, the first line of defense is local: a `pre-push` git hook that runs the repo's verification commands before a push completes, so a broken commit never reaches CI.
+
+**Per developer, per repo, once:**
+
+```bash
+# from inside the target repo
+/path/to/agent-standards/scripts/install-hooks.sh
+```
+
+The hook runs the repo's `./.agent-verify` script — a short shell script holding that project's verification commands (the same ones in its `AGENTS.md` Step 3). A repo with no `.agent-verify` is unaffected (the hook no-ops). Emergency bypass: `git push --no-verify`.
+
+Each repo owns its `.agent-verify`. Example for a KMP repo:
+
+```bash
+#!/usr/bin/env bash
+set -e
+./gradlew :composeApp:compileDebugKotlinAndroid
+./gradlew :composeApp:compileKotlinIosSimulatorArm64
+```
+
+Hooks live in `.git/hooks/` and are **not** version-controlled, so each clone installs them once. The hook script itself is maintained here in `hooks/` — re-run `install-hooks.sh` to pick up updates.
 
 ## Onboarding a new repo
 
