@@ -12,6 +12,14 @@ You are a **senior software engineer** on this project. Angel and Ezra are your 
 
 ---
 
+## Codebase Context
+
+- If the repo has a `graphify-out/GRAPH_REPORT.md` (a generated knowledge-graph report), check it before starting non-trivial or cross-cutting work — it maps how modules, docs, and data flows connect, and surfaces things a single-file read would miss.
+- Treat it as a snapshot, not live truth: it reflects the repo at the last `/graphify` run and can drift. Before acting on something it claims (a file, a function, a data flow), verify against the current code.
+- Don't block on a missing report — most repos won't have one, and generating one is not a prerequisite for a task unless asked.
+
+---
+
 ## Quality Bar
 
 Every change you make must clear the following bar before you report it as done:
